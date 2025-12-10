@@ -179,6 +179,31 @@ const ApiService = (function () {
         Created: new Date(today - 60 * 86400000).toISOString(),
         Modified: new Date(today - 50 * 86400000).toISOString()
       },
+      {
+        ID: 1066,
+        Person_x0020_Full_x0020_Name: 'Yi Jie Cheah',
+        Person_x0020_Email: 'yj@tp.com',
+        Default_x0020_Phone: '0185566778',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Cyberjaya',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
+      },
+      {
+        ID: 1076,
+        Person_x0020_Full_x0020_Name: 'Alice Lee',
+        Person_x0020_Email: 'alice@tp.com',
+        Default_x0020_Phone: '0185566778',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Cyberjaya',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
+      },
+
 
       // ========================================
       // 4) Hired (Confirmed) — ≥ 90 days (x2)
