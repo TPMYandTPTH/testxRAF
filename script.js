@@ -160,10 +160,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if needs reminder (any Application Received status)
             const needsAction = mappedStatus === 'Application Received';
             
-            // Get location and position for payment tier determination
+            // Get location for payment tier determination
             const location = (item.Location || item.location || '').trim();
-            const position = (item.Position || item.position || '').trim();
-            const paymentTier = item.PaymentTier || null; // From mock data
             
             const processedReferral = {
                 // IDs
@@ -187,11 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 isXRAF: isXRAF,
                 isPreviousCandidate: !isXRAF && source !== '',
                 
-                // Location and position info
+                // Location info
                 location: location,
-                position: position,
                 nationality: item.F_Nationality || item.nationality || '',
-                PaymentTier: paymentTier, // For tier-based earnings calculation
                 
                 // Dates
                 createdDate: createdDate,
@@ -560,31 +556,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update earnings table with new 3-tier structure
-    // Counts eligible referrals by payment tier based on PaymentTier field or auto-detection
+    // Note: Currently showing all 3 tiers, but count is based on Hired (Confirmed) only
+    // Location-based differentiation will be added later
     function updateEarningsTable(referrals) {
         const earningsBody = document.getElementById('earnings-body');
         if (!earningsBody) return;
         
         // Count eligible candidates (Hired Confirmed + xRAF source)
         const eligibleReferrals = referrals.filter(r => r.isEligibleForPayment);
+        const eligibleCount = eligibleReferrals.length;
         
-        // Count by payment tier
-        let johorCount = 0;
-        let standardCount = 0;
-        let interpreterCount = 0;
-        
-        eligibleReferrals.forEach(r => {
-            // Use PaymentTier if available (from mock data), otherwise auto-detect
-            const tier = r.PaymentTier || detectPaymentTier(r);
-            
-            if (tier === 'johor') {
-                johorCount++;
-            } else if (tier === 'interpreter') {
-                interpreterCount++;
-            } else {
-                standardCount++;
-            }
-        });
+        // For now, show all as "Standard" until location differentiation is implemented
+        // TODO: Add location-based tier detection when backend is ready
+        const johorCount = 0; // Will be: eligibleReferrals.filter(r => r.location.toLowerCase().includes('johor')).length;
+        const interpreterCount = 0; // Will be: eligibleReferrals.filter(r => r.jobType === 'interpreter').length;
+        const standardCount = eligibleCount; // For now, all eligible go to standard
         
         // Calculate earnings
         const johorEarnings = johorCount * 500;
@@ -595,19 +581,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const t = translations[AppState.currentLanguage];
         
         earningsBody.innerHTML = `
-            <tr class="tier-johor">
+            <tr>
                 <td>${t.statusJohorProbation || 'Mandarin - Johor (RM500)'}</td>
                 <td>RM 500</td>
                 <td>${johorCount}</td>
                 <td>RM ${johorEarnings.toLocaleString()}</td>
             </tr>
-            <tr class="tier-standard">
+            <tr>
                 <td>${t.statusStandardProbation || 'Standard Roles (RM800)'}</td>
                 <td>RM 800</td>
                 <td>${standardCount}</td>
                 <td>RM ${standardEarnings.toLocaleString()}</td>
             </tr>
-            <tr class="tier-interpreter">
+            <tr>
                 <td>${t.statusInterpreterProbation || 'Interpreter WFH (RM3,000)'}</td>
                 <td>RM 3,000</td>
                 <td>${interpreterCount}</td>
@@ -616,25 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         document.getElementById('total-earnings').textContent = `RM ${totalEarnings.toLocaleString()}`;
-    }
-    
-    // Auto-detect payment tier from referral data
-    function detectPaymentTier(referral) {
-        const position = (referral.position || referral.Position || '').toLowerCase();
-        const location = (referral.location || referral.Location || '').toLowerCase();
-        
-        // Check for Interpreter position
-        if (position.includes('interpreter')) {
-            return 'interpreter';
-        }
-        
-        // Check for Johor location
-        if (location.includes('johor')) {
-            return 'johor';
-        }
-        
-        // Default to standard
-        return 'standard';
     }
     
     // Update reminder section
