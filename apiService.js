@@ -1,5 +1,5 @@
 // apiService.js — Power Automate Integration + Demo Dataset
-// Updated: December 2024 - New payment structure
+// Updated: December 2025 - New payment structure
 // Ensures a global `ApiService` for script.js to call
 
 const ApiService = (function () {
@@ -67,7 +67,7 @@ const ApiService = (function () {
   }
 
   // ---------------- Mock dataset (2 examples for each of the 6 groups) ----------------
-  // Updated December 2024 - Proper 12 records (2 per status category)
+  // Updated December 2025 - Proper 12 records (2 per status category)
   function getMockReferrals() {
     const today = new Date();
     
